@@ -1,0 +1,15 @@
+program reassignment;
+begin
+var
+	a: integer;
+	b:integer;
+	tmp:integer;
+begin
+	read(a);
+	read(b);
+	if a < b then begin
+		tmp := a;
+		a := b;
+		b := tmp;
+	end
+end;
