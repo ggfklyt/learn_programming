@@ -1,2 +1,0 @@
-Input x!
-Square x is 16
