@@ -1,0 +1,38 @@
+program diamond;
+var
+	height, currentLine: integer;
+
+procedure printSpaces(count: integer);
+var
+	i: integer;
+begin
+	for i := 1 to count do
+		write(' ')
+end;
+
+procedure printLineOfDiamond(line, height: integer);
+var 
+	i: integer;
+begin
+	     printSpaces(height - currentLine + 1);
+                write('*');
+                if currentLine = 1 then
+                        writeln()
+                else begin
+                        for i := 1 to 2 * line - 3 do
+                                write(' ');
+                        writeln('*');
+                end;
+end;
+
+begin
+	write('Please input height of diamond:');
+	repeat
+		write('Enter the diamond''s height (posiitive odd): ');
+		readln(height);
+	until (height > 0) and (height mod 2 = 1);
+	for currentLine := 1 to height div 2 + 1 do
+		printLineOfDiamond(currentLine, height);
+	for currentLine := height div 2 downto 1 do
+		printLineOfDiamond(currentLine, height);
+end.
