@@ -1,0 +1,13 @@
+program isLatinLetter;
+
+function isLatinLetter(ch: char): boolean;
+begin
+	isLatinLetter := (ch >= 'a') and (ch <= 'z') or (ch >= 'A') and (ch <= 'Z') 
+end;
+
+var
+	ch: char;
+begin
+	readln(ch);
+	writeln(isLatinLetter(ch));
+end.
