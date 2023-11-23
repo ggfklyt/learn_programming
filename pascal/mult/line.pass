@@ -1,0 +1,15 @@
+program line;
+var
+	i: integer;
+	j: integer;
+	k: integer;
+begin
+	write('Please input number of lines: ');
+	readln(i);
+	for j := 0 to i do
+	begin
+		for k := 0 to j do
+			write(' ');
+		writeln('*');
+	end
+end.
