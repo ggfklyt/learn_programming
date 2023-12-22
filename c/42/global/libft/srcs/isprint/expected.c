@@ -1,7 +1,7 @@
-#include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
 int main(int argc, char **argv)
 {
-	printf("%lu", strlen(argv[1]));
+	printf("%d", isprint(*argv[1]));
 }
