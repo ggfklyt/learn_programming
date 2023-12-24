@@ -13,6 +13,6 @@ int main(int argc, char **argv)
 		argv[1]++;
 	}
 	*tmp = '\0';
-	void *res = ft_memset((void *) argv[1], ft_atoi(argv[2]), ft_atoi(argv[3]));
+	void *res = ft_memset((void *) dst, ft_atoi(argv[2]), ft_atoi(argv[3]));
 	printf("%s", (char *) res);
 }

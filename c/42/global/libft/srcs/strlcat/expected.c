@@ -5,7 +5,7 @@
 
 int main(int argc, char **argv)
 {
-	char *dst = malloc(sizeof(argv[1]) + sizeof(argv[2]) - 1);
+	char *dst = malloc(strlen(argv[1]) + strlen(argv[2]) + 1);
 	char *tmp = dst;
 	while (*argv[1]) {
 		*tmp = *argv[1];

@@ -2,10 +2,11 @@
 #include "ft_strlcat.h"
 #include "ft_atoi.h"
 #include <stdlib.h>
+#include "ft_strlen.h"
 
 int main(int argc, char **argv)
 {
-	char *dst = malloc(sizeof(argv[1]) + sizeof(argv[2]) - 1);
+	char *dst = malloc(ft_strlen(argv[1]) + ft_strlen(argv[2]) + 1);
 	char *tmp = dst;
 	while (*argv[1]) {
 		*tmp = *argv[1];
