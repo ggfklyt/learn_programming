@@ -4,6 +4,6 @@
 
 int main(int argc, char **argv)
 {
-	void *res = memchr(argv[1], *argv[2], atoi(argv[3]));	
-	printf("%s", (char *) res);
+	int res = memcmp(argv[1], argv[2], atoi(argv[3]));
+	printf("%d", res);
 }
