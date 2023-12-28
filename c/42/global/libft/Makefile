@@ -10,10 +10,10 @@ OBJS=$(addprefix $(OBJS_DIR)/, $(patsubst %.c, %.o, $(notdir $(SRCS))))
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	ar -rcs libft.a $?
+	ar -rcs libft.a $(OBJS)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm $(OBJS)
+	rm $(OBJS) $(NAME)
