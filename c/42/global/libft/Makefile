@@ -13,6 +13,7 @@ $(NAME): $(OBJS)
 	ar -rcs libft.a $(OBJS)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
+	mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
