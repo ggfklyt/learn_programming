@@ -3,10 +3,12 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int main(int argc, char **argv)
+int main()
 {
 	int fd = open("map.txt", O_RDONLY);
-	printf("%d\n", fd);
-	get_next_line(fd);
+	char *line = NULL;
+	while (NULL != (line = get_next_line(fd))) { 
+		printf("%s\n", line);
+	}
 	close(fd);
 }
