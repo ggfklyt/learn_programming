@@ -9,6 +9,17 @@ size_t ft_strlen(const char *s)
 	return len;
 }
 
+char *ft_strchr(const char *s, int c)
+{
+	char *scp = (char *) s;
+	while (*scp) {
+		if (*scp == c)
+			return scp;
+		scp++;
+	}
+	return NULL;
+}
+
 size_t ft_strlcat(char * restrict dst, const char * restrict src, size_t dstsize)
 {
 	size_t srclen = ft_strlen(src);
