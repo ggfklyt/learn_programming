@@ -40,4 +40,17 @@ size_t ft_strlcat(char * restrict dst, const char * restrict src, size_t dstsize
 	return res;
 }
 
-
+void *ft_memccpy(void *restrict dst, const void *restrict src, int c, size_t n)
+{
+	char *dstcp = (char *) dst;
+	char *srccp = (char *) src;
+	while (n) {
+		*dstcp = *srccp;
+		if (*srccp == c)
+			return dstcp;
+		dstcp++;
+		srccp++;
+		n--;
+	}
+	return NULL;
+}
