@@ -1,124 +1,85 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 #include "get_next_line_utils.h"
 
-#ifndef BUFFER_SIZE
-	#define BUFFER_SIZE 7
-#endif
-
-static int ft_strcpy(char *dst, char *src)
-{
-	int count = 0;
-	while (*src) {
-		*dst = *src;
-		dst++;
-		src++;
-		count++;
+char *ft_strjoin(const char *s1, const char *s2) {
+	char *res = malloc((s1 ? ft_strlen(s1) : 0) + (s2 ? ft_strlen(s2) : 0) + 1);
+	char *rescp = res;
+	if (!res)
+		return 0;
+	if (NULL != s1) {
+		while (*s1) {
+			*rescp = *s1;
+			rescp++;
+			s1++;
+		}
 	}
-	*dst = '\0';
-	return count;
-}
-
-static char *resize(char *s, int len, int *size)
-{
-//	printf("resize(s=%s, len=%d, size=%d)\n", s, len, *size);
-	int newsize = len / BUFFER_SIZE * BUFFER_SIZE * 2 + 1;
-//	printf("Old line size was %d. New line size is gonna be %d\n", *size, newsize);
-	char *scp = malloc(newsize * sizeof(char));
-//	printf("memory for scp has allocated\n");
-	ft_strcpy(scp, s);
-//	printf("resized line is %s\n", scp);
-	*size = newsize;
-//	printf("Resizing has finished\n");
-	free(s);
-//	printf("Old line was freed\n");
-	return scp;
-}
-
-static char *cp_buf_to_line(char *line, int *lncurpos, int *lnsize, char *buf, int len)
-{
-//	printf("lncurpos = %d lnsize = %d\n", *lncurpos, *lnsize);
-	if (*lncurpos + len > *lnsize - 1) {
-//		printf("Need resize\n");
-//		printf("Line before resizing %s\n", line);
-		line = resize(line, *lncurpos, lnsize);
-//		printf("Line after resizing %s\n", line);
+	if (NULL != s2) {
+		while (*s2) {
+			*rescp = *s2;
+			rescp++;
+			s2++;
+		}
 	}
-//	printf("Concatenating line=%s buf=%s linesize = %d\n", line, buf, ft_strlen(line) + len + 1);
-	ft_strlcat(line, buf, ft_strlen(line) + len + 1);
-//	printf("line = %s AFTER CONCAT\n", line);
-	*lncurpos += len;
-	return line;	
-}
-
-static int ft_strnchr(char *s, int c, size_t len)
-{
-	while (len) {
-		if (*s == c)
-			return 1;
-		s++;
-		len--;
-	}
-	return 0;
+	*rescp = '\0';
+	return res;
 }
 
 char *get_next_line(int fd)
 {
-	static char *remainder = NULL;
-	char *nlpos = NULL;
-	char *line = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	int lnsize = BUFFER_SIZE + 1;
-	int lncurpos = 0;
-	line[lncurpos] = '\0';
-
-	if (NULL != remainder) {
-	//	printf("remainder = %s\n", remainder);
-		if ((nlpos = ft_strchr(remainder, '\n'))) {
-	//		printf("nlpos in remainder = %d\n", nlpos - remainder);
-			char *endln = ft_memccpy(line, remainder, '\n', ft_strlen(remainder));
-	//		printf("ft_strlen(remainder)=%d\n", ft_strlen(remainder));
-			lncurpos += endln - line;
-			*endln = '\n';
-			*(endln + 1)  = '\0';
-			if (*(nlpos + 1) == '\0') {
-				remainder = NULL;
+	if ((BUFFER_SIZE < 0) || read(fd, NULL, 0) < 0)
+		return NULL;
+	char *nlptr = NULL;
+	char *buf = malloc(BUFFER_SIZE + 1);
+	if (!buf)
+		return 0;
+	char *line = NULL;
+	char *new_line = NULL;
+	int count = 0;
+	char *str_before_nl = NULL;
+	static char *rem = NULL;
+	char *new_rem = NULL;
+	if (rem) {
+		if ((nlptr = ft_strchr(rem, '\n'))) {
+			str_before_nl = malloc(nlptr - rem + 2);
+			ft_strlcat(str_before_nl, rem, nlptr - rem + 2);
+			new_line = ft_strjoin(line, str_before_nl);
+			free(str_before_nl);
+			line = new_line;
+			str_before_nl = NULL;
+			if (ft_strlen(nlptr + 1) > 0) {
+				new_rem = malloc(ft_strlen(nlptr + 1) + 1);
+				ft_strlcpy(new_rem, nlptr + 1, ft_strlen(nlptr + 1) + 1);
+				free(rem);
+				rem = new_rem;
+				new_rem = NULL;
 			} else {
-				remainder = nlpos + 1;
+				free(rem);
+				rem = NULL;
 			}
-	//		printf("line = %s lncurpos = %d\n", line, lncurpos);
 		} else {
-			cp_buf_to_line(line, &lncurpos, &lnsize, remainder, ft_strlen(remainder));
-			//free(remainder);
-			//remainder = NULL;
+			line = rem;
+			rem = NULL;
 		}
 	}
-	char *buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	int bytes_read = 0;
-	while (!ft_strchr(line, '\n') && (bytes_read = read(fd, buf, BUFFER_SIZE)) > 0) {
-	//	printf("bytes_read = %d\n", bytes_read);
-		*(buf + bytes_read) = '\0';
-		if ((nlpos = ft_strchr(buf, '\n'))) {
-			remainder = malloc((ft_strlen(nlpos + 1) + 1) * sizeof(char));
-			ft_strcpy(remainder, nlpos + 1);
-			*(nlpos + 1) = '\0';
-		}
-	//	printf("buf = %s\n", buf);
-		line = cp_buf_to_line(line, &lncurpos, &lnsize, buf, ft_strlen(buf));
-	//	printf("line = %s\n", line);
-		if (nlpos)
+	while ((line ? !ft_strchr(line, '\n') : 1) && (count = read(fd, buf, BUFFER_SIZE)) > 0) {
+		buf[BUFFER_SIZE] = '\0';
+		if ((nlptr = ft_strchr(buf, '\n'))) {
+			str_before_nl = malloc(nlptr - buf + 2); // 0123\n3\0
+			ft_strlcat(str_before_nl, buf, nlptr - buf + 2);
+			new_line = ft_strjoin(line, str_before_nl);
+			rem = ft_strjoin(rem, nlptr + 1);
+			free(line);
+			free(str_before_nl);
+			line = new_line;
+			new_line = NULL;
 			break;
+		} else {
+			new_line = ft_strjoin(line, buf);
+			free(line);
+			line = new_line;
+			new_line = NULL;
+		}
 	}
-	//printf("lncurpos = %d\n", lncurpos);
-	//printf("ft_strchr(line, '\\n') = %lu\n", ft_strchr(line, '\n'));
-	//printf("ft_strchr(line) = %d\n", ft_strchr(line, '\n') - line);
-	return lncurpos == 0 ? (*line == '\n' ? line: NULL) : line;
+	free(buf);
+	buf = NULL;
+	return line;
 }
-
-/*
- * 1. Read buf 
- * 	buf = 123\n456\n789
- * 2. search for \n
- * 3. buf = 123\n\0 remainder = 456\n789
- * 4. search in remainder for \n
-*/

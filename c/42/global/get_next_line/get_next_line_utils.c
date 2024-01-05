@@ -1,24 +1,4 @@
-#include <stdlib.h>
-
-size_t ft_strlen(const char *s)
-{
-	size_t len = 0;
-	while (*s++)
-		len++;
-
-	return len;
-}
-
-char *ft_strchr(const char *s, int c)
-{
-	char *scp = (char *) s;
-	while (*scp) {
-		if (*scp == c)
-			return scp;
-		scp++;
-	}
-	return NULL;
-}
+#include "get_next_line_utils.h"
 
 size_t ft_strlcat(char * restrict dst, const char * restrict src, size_t dstsize)
 {
@@ -40,17 +20,38 @@ size_t ft_strlcat(char * restrict dst, const char * restrict src, size_t dstsize
 	return res;
 }
 
-void *ft_memccpy(void *restrict dst, const void *restrict src, int c, size_t n)
+size_t ft_strlen(const char *s)
+{
+	size_t len = 0;
+	while (*s++)
+		len++;
+		
+	return len;
+}
+
+char *ft_strchr(const char *s, int c)
+{
+	char *scp = (char *) s;
+	while (*scp) {
+		if (*scp == c)
+			return scp;
+		scp++;
+	}
+	return NULL;
+}
+
+size_t ft_strlcpy(char *restrict dst, const char *restrict src, size_t dstsize)
 {
 	char *dstcp = (char *) dst;
 	char *srccp = (char *) src;
-	while (n) {
+	size_t initial_dstsize = dstsize;
+	while ((dstsize > 1) && *srccp) {
 		*dstcp = *srccp;
-		if (*srccp == c)
-			return dstcp;
 		dstcp++;
 		srccp++;
-		n--;
+		dstsize--;
 	}
-	return NULL;
+	if (initial_dstsize != 0)
+		*dstcp = '\0';
+	return ft_strlen(src);
 }
