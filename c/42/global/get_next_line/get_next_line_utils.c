@@ -1,4 +1,4 @@
-#include "get_next_line_utils.h"
+#include "get_next_line.h"
 
 size_t ft_strlcat(char * restrict dst, const char * restrict src, size_t dstsize)
 {
