@@ -1,4 +1,4 @@
-#include "get_next_line_utils.h"
+#include "get_next_line.h"
 
 char *ft_strjoin(const char *s1, const char *s2) {
 	char *res = malloc((s1 ? ft_strlen(s1) : 0) + (s2 ? ft_strlen(s2) : 0) + 1);
@@ -25,8 +25,8 @@ char *ft_strjoin(const char *s1, const char *s2) {
 
 char *get_next_line(int fd)
 {
-	if ((BUFFER_SIZE < 0) || read(fd, NULL, 0) < 0)
-		return NULL;
+	if ((BUFFER_SIZE <= 0) || read(fd, NULL, 0) < 0)
+		return (NULL);
 	char *nlptr = NULL;
 	char *buf = malloc(BUFFER_SIZE + 1);
 	if (!buf)
@@ -61,8 +61,8 @@ char *get_next_line(int fd)
 		}
 	}
 	while ((line ? !ft_strchr(line, '\n') : 1) && (count = read(fd, buf, BUFFER_SIZE)) > 0) {
-		buf[BUFFER_SIZE] = '\0';
-		if ((nlptr = ft_strchr(buf, '\n'))) {
+		buf[count] = '\0';
+		if ((nlptr = ft_strchr(buf, '\n')) && *(nlptr + 1)) {
 			str_before_nl = malloc(nlptr - buf + 2); // 0123\n3\0
 			ft_strlcat(str_before_nl, buf, nlptr - buf + 2);
 			new_line = ft_strjoin(line, str_before_nl);
@@ -78,8 +78,8 @@ char *get_next_line(int fd)
 			line = new_line;
 			new_line = NULL;
 		}
+		free(buf);
+		buf = NULL;
 	}
-	free(buf);
-	buf = NULL;
-	return line;
+	return line ? line : (NULL);
 }
