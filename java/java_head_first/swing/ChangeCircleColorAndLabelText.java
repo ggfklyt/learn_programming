@@ -1,31 +1,28 @@
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 
-public class ChangeCircleColorByClick implements ActionListener {
+public class ChangeCircleColorAndLabelText {
 	JFrame frame = new JFrame();
 
 	public static void main(String[] args) {
-		ChangeCircleColorByClick gui = new ChangeCircleColorByClick();
+		ChangeCircleColorAndLabelText gui = new ChangeCircleColorAndLabelText();
 		gui.go();
 	}
 
-
 	public void go() {
-		frame.setSize(300, 300);
+		JButton colorButton = new JButton("change circle color");
+		JButton labelButton = new JButton("change text");
+		JLabel label = new JLabel("some text");
 		JPanel drawPanel = new MyDrawPanel();
 
-		JButton button = new JButton("Change circle color!");
-		button.addActionListener(this);
 		frame.getContentPane().add(BorderLayout.CENTER, drawPanel);
-		frame.getContentPane().add(BorderLayout.SOUTH, button);
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-	}
+		frame.getContentPane().add(BorderLayout.WEST, label);
+		frame.getContentPane().add(BorderLayout.EAST, labelButton);
+		frame.getContentPane().add(BorderLayout.SOUTH, colorButton);
 
-	public void actionPerformed(ActionEvent event) {
-		frame.repaint();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(300, 300);
+		frame.setVisible(true);
 	}
 }
 
@@ -37,7 +34,6 @@ class MyDrawPanel extends JPanel {
 
 		Color randomColor = new Color(red, green, blue);
 		g.setColor(randomColor);
-
-		g.fillOval(20, 50, getWidth() / 2, getHeight() / 2);
+		g.fillOval(20, 20, 50, 50);
 	}
 }
