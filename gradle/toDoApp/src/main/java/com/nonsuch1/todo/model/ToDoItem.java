@@ -11,6 +11,11 @@ public class ToDoItem implements Comparable<ToDoItem> {
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 
-	public boolean isCompleted { return completed; }
-	public void setCompleted { this.completed = completed; }	
+	public boolean isCompleted() { return completed; }
+	public void setCompleted(boolean completed) { this.completed = completed; }
+
+	@Override
+	public int compareTo(ToDoItem toDoItem) {
+		return this.getId().compareTo(toDoItem.getId());
+	}
 }

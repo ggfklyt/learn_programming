@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
+import com.nonsuch1.todo.model.ToDoItem;
 
 public class InMemoryToDoRepository implements ToDoRepository {
 	private AtomicLong currentId = new AtomicLong();
@@ -24,11 +25,18 @@ public class InMemoryToDoRepository implements ToDoRepository {
 
 	@Override
 	public void update(ToDoItem toDoItem) {
-		toDos.replace(toDoitem.getId(), toDoItem);
+		toDos.replace(toDoItem.getId(), toDoItem);
 	}
 
 	@Override
 	public void delete(ToDoItem toDoItem) {
 		toDos.remove(toDoItem.getId());
+	}
+
+	@Override
+	public List<ToDoItem> findAll() {
+		List<ToDoItem> toDoItems = new ArrayList<ToDoItem>(toDos.values());
+		Collections.sort(toDoItems);
+		return toDoItems;
 	}
 }

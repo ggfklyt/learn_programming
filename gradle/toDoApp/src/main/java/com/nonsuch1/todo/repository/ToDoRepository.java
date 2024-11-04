@@ -1,7 +1,7 @@
 package com.nonsuch1.todo.repository;
 
 import com.nonsuch1.todo.model.ToDoItem;
-import java.util.Collection;
+import java.util.List;
 
 public interface ToDoRepository {
 	List<ToDoItem> findAll();
